@@ -18,7 +18,8 @@ const board = [
 
 const drawnSets = [
     // diagonal
-    [8, 24, 53, 72],
+    [8, 24, 'FREE', 53, 72],
+    [65, 48, 'FREE', 19, 1],
     // horizontal
     [8, 29, 35, 54, 65],
     [13, 24, 44, 48, 67],

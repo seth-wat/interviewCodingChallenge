@@ -29,18 +29,26 @@ function checkForBingo(bingoCard, drawnNumbers) {
     let won = false
 
     /*
-      Since there are 5 rows, 5 columns, and 1 diagonal set,
+      Since there are 5 rows, 5 columns, and 2 diagonal sets,
       an outer loop of 5 can be used check everything at once.
       This uses the loop indexes to offset onto the correct
       row or column.
 
       This was tested on Node 17.2.0.
     */
+    const diagonalRight = []
+    const diagonalLeft = []
 
     for (let i = 0; i < 5; i++) {
-        const diagonal = []
-        i === 0 ? diagonal.push(i) : diagonal.push(i * 5 + i)
-        if (diagonal.length === 5 && matches(diagonal, drawnNumbers)) {
+        diagonalRight.push(bingoCard[i * 5 + i])
+        if (diagonalRight.length === 5 && matches(diagonalRight, drawnNumbers)) {
+            won = true
+            break
+        }
+
+        const reversedIndex = 5 - i
+        diagonalLeft.push(bingoCard[reversedIndex * 4])
+        if (diagonalLeft.length === 5 && matches(diagonalLeft, drawnNumbers)) {
             won = true
             break
         }
