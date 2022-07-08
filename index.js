@@ -19,17 +19,56 @@
  * will pass valid data to your function.
  */
 
-function checkForBingo (bingoCard, drawnNumbers) {
-  // this code for debug purposes, you can remove.
-  console.log('Drawn Numbers: ' + JSON.stringify(drawnNumbers));
+function matches(group, drawnNumbers) {
+    return group.every(
+        number => number === 'FREE' || drawnNumbers.includes(number)
+    )
+}
 
-  for (let i=0, len=bingoCard.length; i<len; i++) {
-    let row = Math.floor(i/5);
-    let col = i % 5;
-   //  console.log(`${row},${col}: ${bingoCard[i]}`);
-  }
+function checkForBingo(bingoCard, drawnNumbers) {
+    let won = false
 
-  return false;
+    /*
+      Since there are 5 rows, 5 columns, and 1 diagonal set,
+      an outer loop of 5 can be used check everything at once.
+      This uses the loop indexes to offset onto the correct
+      row or column.
+
+      This was tested on Node 17.2.0.
+    */
+
+    for (let i = 0; i < 5; i++) {
+        const diagonal = []
+        i === 0 ? diagonal.push(i) : diagonal.push(i * 5 + i)
+        if (diagonal.length === 5 && matches(diagonal, drawnNumbers)) {
+            won = true
+            break
+        }
+
+        let row = []
+        for (let j = i; j < 5; j++) {
+            row.push(bingoCard[j + i * 5])
+        }
+        if (matches(row, drawnNumbers)) {
+            won = true
+            break
+        } else {
+            row = []
+        }
+
+        let column = []
+        for (let j = 0; j < 5; j++) {
+            column.push(bingoCard[j * 5 + i])
+        }
+        if (matches(column, drawnNumbers)) {
+            won = true
+            break
+        } else {
+            column = []
+        }
+    }
+
+    return won
 }
 
 module.exports = checkForBingo;
